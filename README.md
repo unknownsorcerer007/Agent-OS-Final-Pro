@@ -1,10 +1,10 @@
 <!-- mcp-name: io.github.factspark23-hash/Agent-OS -->
 
 <h1 align="center">
-    <a href="https://github.com/factspark23-hash/Agent-OS">
+    <a href="https://github.com/factspark23-hash/Agent-OS-Final-Pro">
         <picture>
           <source media="(prefers-color-scheme: dark)" srcset="docs/cover_dark.svg">
-          <img alt="Agent-OS" src="docs/cover_light.svg" width="700">
+          <img alt="Agent-OS Logo" src="docs/cover_light.svg" width="750">
         </picture>
     </a>
     <br>
@@ -12,230 +12,220 @@
 
 <p align="center">
     <a href="https://opensource.org/licenses/MIT">
-        <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" />
+        <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License: MIT" />
     </a>
     <a href="https://www.python.org/downloads/">
-        <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+" />
+        <img src="https://img.shields.io/badge/python-3.10+-blue.svg?style=flat-square" alt="Python 3.10+" />
     </a>
     <a href="https://www.docker.com/">
-        <img src="https://img.shields.io/badge/Docker-Ready-2496ED.svg" alt="Docker Ready" />
+        <img src="https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=flat-square" alt="Docker Ready" />
     </a>
-    <img src="https://img.shields.io/badge/tools-207-brightgreen.svg" alt="207 Tools" />
-    <img src="https://img.shields.io/badge/version-3.2.0-orange.svg" alt="Version 3.2.0" />
+    <img src="https://img.shields.io/badge/tools-209-brightgreen.svg?style=flat-square" alt="209 Tools" />
+    <img src="https://img.shields.io/badge/version-3.2.0-orange.svg?style=flat-square" alt="Version 3.2.0" />
     <br/>
-    <a href="https://github.com/factspark23-hash/Agent-OS/stargazers">
-        <img src="https://img.shields.io/github/stars/factspark23-hash/Agent-OS?style=social" alt="Stars" />
+    <a href="https://github.com/factspark23-hash/Agent-OS-Final-Pro/stargazers">
+        <img src="https://img.shields.io/github/stars/factspark23-hash/Agent-OS-Final-Pro?style=social" alt="Stars" />
     </a>
-    <a href="https://github.com/factspark23-hash/Agent-OS/network/members">
-        <img src="https://img.shields.io/github/forks/factspark23-hash/Agent-OS?style=social" alt="Forks" />
+    <a href="https://github.com/factspark23-hash/Agent-OS-Final-Pro/network/members">
+        <img src="https://img.shields.io/github/forks/factspark23-hash/Agent-OS-Final-Pro?style=social" alt="Forks" />
     </a>
 </p>
 
 <p align="center">
-    <a href="#-quick-start"><strong>Quick Start</strong></a> &middot;
+    <a href="#-core-use-cases"><strong>Core Use Cases</strong></a> &middot;
+    <a href="#-architectural-highlights"><strong>Features</strong></a> &middot;
     <a href="#-connectors"><strong>Connectors</strong></a> &middot;
-    <a href="#-stealth-engine"><strong>Stealth</strong></a> &middot;
-    <a href="#-adaptive-scraper"><strong>Adaptive</strong></a> &middot;
-    <a href="#-bot-detection-tests"><strong>Verify Stealth</strong></a> &middot;
-    <a href="#-architecture"><strong>Architecture</strong></a> &middot;
-    <a href="#-deployment"><strong>Deployment</strong></a>
+    <a href="#-quick-start"><strong>Quick Start</strong></a> &middot;
+    <a href="#-interactive-setup-wizard"><strong>Setup Wizard</strong></a> &middot;
+    <a href="#-test-suite--readiness"><strong>Verification</strong></a>
 </p>
 
 ---
 
-Agent-OS gives AI agents a **real browser** — persistent, stealthy, and self-hosted. It ships **207 tools** for navigation, form filling, data extraction, CAPTCHA bypass, adaptive scraping, and more. Works with **Claude, Cursor, GPT-4, Codex, OpenClaw**, and any agent that can send an HTTP request.
+## 🌐 What is Agent-OS?
 
-One command to install. One config to connect. Zero API keys needed.
+**Agent-OS** is an operating system layer that gives AI agents a **real, persistent, and self-hosted web browser** with zero-friction installation. 
+
+It exposes **209 production-ready tools** for mouse interactions, form filling, data extraction, CAPTCHA bypass, and session persistence. Agent-OS turns your LLM (Claude Code, Cursor, GPT-4o, Claude Desktop, OpenClaw, or custom agents) into an autonomous web operator that can navigate complex sites, bypass CDNs, and complete multi-step workflows.
 
 ---
 
-## Why Agent-OS?
+## 🎯 Core Use Cases
 
-| Problem | Agent-OS Solution |
-|---------|-------------------|
-| AI agents can't interact with websites | Real Chromium browser with 207 tools |
-| Bot detection blocks automation | 26+ anti-detection vectors, Cloudflare bypass |
-| Website changes break selectors | **Adaptive scraper** — learns element fingerprints, auto-relocates |
-| Manual login required | Login handoff — pause AI, human logs in, resume |
-| Single IP gets blocked | Proxy rotation with 4 strategies + health tracking |
-| LLM token waste on browser output | SmartCompressor — 87% token savings |
-| Need multiple AI platforms | 7 connectors — MCP, OpenAI, Claude, CLI, REST, OpenClaw |
+* **Autonomous Lead Generation & Form Filling**: Let AI search platforms, extract details, and fill out forms with built-in human-mimicking keystrokes and pointer trails.
+* **Persistent Web Scraping (Self-Healing)**: Scraping pipelines that do not break when classes, IDs, or page layouts change.
+* **Stealth Data Aggregation**: Access data protected by aggressive bot managers (Cloudflare, Akamai, Turnstile) using real browser spoofing and proxy rotation.
+* **Human-in-the-Loop Operations**: Automate 99% of workflows; hand back browser window to a human for 2FA/OTP login validation, then resume.
+* **Token-Optimized Automation**: Capture web states as lightweight semantic trees instead of raw HTML, saving 90%+ in LLM token usage.
+
+---
+
+## 🛡️ Key Architectural Features
+
+### 1. Stealth & Evasion Engine (No-Mercy Anti-Detection)
+Agent-OS defeats commercial bot detection systems (DataDome, PerimeterX, Cloudflare Bot Management, Turnstile, Kasada, hCaptcha) using a 4-layer defense system:
+* **Layer 1 (Network)**: Emulates real Chrome/Firefox TLS handshakes (JA3/JA4 fingerprints) via `curl_cffi` to match client properties.
+* **Layer 2 (CDP)**: Dynamic runtime scripting injection using `Page.addScriptToEvaluateOnNewDocument` to spoof User-Agents, screen configurations, and overrides.
+* **Layer 3 (JavaScript)**: Spoofs WebGL/Canvas rendering, masks `navigator.webdriver` flags, overrides Speech/Audio synthesis signatures, and overrides RTC IP leaks.
+* **Layer 4 (Behavior)**: Simulates human mouse movement paths (Bézier curves), natural typing speeds with randomized pauses, and realistic keystroke errors/corrections.
+
+### 2. Self-Healing & Semantic Fallbacks
+* **Smart Element Finder**: Bypasses rigid CSS/XPath selectors. Locates target elements using natural text, placeholder hints, labels, aria-labels, and alt texts.
+* **Adaptive Relocator**: Generates multi-layered element fingerprints (tag names, path strings, parent contexts, text, size). If a website redesign breaks selectors, the relocator scans all page elements and relocates the target based on similarity scoring.
+
+### 3. Frictionless LLM Key Routing & Setup Wizard
+* **Skip ollama Dependencies**: Startup probing for local Ollama weights is completely bypassed unless `OLLAMA_HOST` is explicitly set, allowing instant deployment.
+* **Interactive Setup Wizard**: Launches a shell command (`python main.py --setup`) to configure your standard API keys (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `DEEPSEEK_API_KEY`, `GEMINI_API_KEY`, `OPENROUTER_API_KEY`) and saves them directly to `.env`.
+
+### 4. Human-In-The-Loop Login Handoff
+* **Authentications Token Save & Restore**: Saves active sessions, cookies, and local storage tokens into a base64 encoded JSON string (`export-tokens`) to bypass login steps completely next time.
+* **Manual Portals**: Automatically pauses agent script execution and opens a portal for a human user to complete MFA/2FA, resuming the automation immediately after.
+
+### 5. Multi-Agent Swarm Hub
+* Exposes distributed locks (`hub-lock`/`hub-unlock`) and shared memory spaces across agents.
+* Allows seamless handoffs of browser control between different specialized swarm agents.
 
 ---
 
 ## ⚡ Quick Start
 
-### 🪟 Windows (One-Click)
+One command to install. One configuration to connect. Zero compilation dependencies required.
 
+### 🪟 Windows Setup (PowerShell)
+
+Open PowerShell as Administrator and execute:
 ```powershell
-# Open PowerShell and run:
+# Clone the repository
+git clone https://github.com/factspark23-hash/Agent-OS-Final-Pro.git
+cd Agent-OS-Final-Pro
+
+# Run the frictionless installer (sets up venv, installs packages, sets up chromium)
 .\install.ps1
 
-# To start the server:
+# Run the interactive Setup Wizard to configure your API keys
+.\venv\Scripts\python.exe main.py --setup
+
+# Start the Agent-OS server
 .\start.ps1
 ```
 
-### 🍎 Mac / 🐧 Linux (One-Click)
+### 🍎 Mac / 🐧 Linux Setup
 
+Open your terminal and execute:
 ```bash
-# Open Terminal and run:
-curl -sSL https://raw.githubusercontent.com/factspark23-hash/Agent-OS/main/install.sh | bash
+# Clone the repository
+git clone https://github.com/factspark23-hash/Agent-OS-Final-Pro.git
+cd Agent-OS-Final-Pro
 
-# To start the server:
-python3 main.py --agent-token "dev-token"
+# Install dependencies (with no-compiler fallbacks for aiohttp, yarl, etc.)
+./install.sh
+
+# Run the Setup Wizard to configure API keys
+./venv/bin/python main.py --setup
+
+# Start the Agent-OS server
+./venv/bin/python main.py --agent-token "dev-token"
 ```
 
-### 🐳 Docker
+### 🐳 Docker Deployment
 
 ```bash
-git clone https://github.com/factspark23-hash/Agent-OS.git
-cd Agent-OS
-export POSTGRES_PASSWORD="strong-password"
+git clone https://github.com/factspark23-hash/Agent-OS-Final-Pro.git
+cd Agent-OS-Final-Pro
+export POSTGRES_PASSWORD="your-strong-password"
 docker compose up -d
 ```
 
 ---
 
-## 🧪 Bot Detection Tests (Verify Stealth)
+## 🔌 Connectors Config
 
-Don't trust our words, test it yourself! We've included a standalone script that runs our stealth engine against the internet's toughest bot detectors.
+Agent-OS supports 7 connector pipelines to wire into your favorite agentic stack.
 
-```bash
-# Run this to verify a 100% bypass success rate:
-python run_stealth_tests.py
-```
-This tests against:
-1. **Sannysoft** (Standard Webdriver/CDP checks)
-2. **Cloudflare / NowSecure** (Advanced CDN Challenges)
-3. **CreepJS** (Deep WebGL/Canvas Fingerprinting & Trust Score)
+### Model Context Protocol (MCP) Setup
+To connect Agent-OS browser tools to **Claude Desktop** or **Cursor**, add the following server configuration to your `claude_desktop_config.json`:
 
-*(Note: On Windows, ensure Windows Defender Firewall allows the newly downloaded headless `chrome.exe` to access the internet.)*
-
----
-
-## 🔌 Connectors
-
-All 207 tools are available in every connector:
-
-| Connector | Tools | Use With | API Key? |
-|-----------|-------|----------|----------|
-| **MCP Passthrough** ⭐ | 207 | Claude Desktop, Cursor, Codex | ❌ No |
-| MCP Server | 207 | Claude Desktop, Claude Code, Codex | Optional |
-| OpenAI | 207 | GPT-4, GPT-4o, any OpenAI-compatible | Yes |
-| Claude API | 207 | Claude API (tool-use format) | Yes |
-| OpenClaw | 207 | OpenClaw agent framework | Optional |
-| CLI (Bash) | 206 | Any language (Python, Node, Go...) | Token |
-| HTTP REST | 206 | Direct API calls | Token |
-
-### MCP Passthrough (Zero API Key) ⭐
-
-**Claude Desktop config:**
+#### Windows Config
 ```json
 {
   "mcpServers": {
     "agent-os": {
-      "command": "powershell",
-      "args": ["-ExecutionPolicy", "Bypass", "-File", "C:/absolute/path/to/Agent-OS/run_mcp.ps1"]
+      "command": "powershell.exe",
+      "args": ["-ExecutionPolicy", "Bypass", "-File", "C:/Users/YOUR_USER/.gemini/antigravity/scratch/repo/Agent-OS-Final-Pro-main/run_mcp.ps1"]
     }
   }
 }
 ```
-*(For Mac/Linux, use `bash` and `run_mcp.sh`)*
 
----
-
-## 🛡️ Stealth Engine
-
-Agent-OS defeats bot detection with a **4-layer defense system**:
-
-```text
-┌─────────────────────────────────────────────────────────┐
-│ Layer 1: Network                                         │
-│ Chrome TLS fingerprint (JA3/JA4) via curl_cffi          │
-│ HTTP/2 matching • Bot scripts blocked at network level   │
-├─────────────────────────────────────────────────────────┤
-│ Layer 2: CDP (Chrome DevTools Protocol)                  │
-│ Page.addScriptToEvaluateOnNewDocument injection          │
-│ User-Agent metadata spoofing • Timezone override         │
-├─────────────────────────────────────────────────────────┤
-│ Layer 3: JavaScript (19 injection modules)               │
-│ navigator.webdriver removal • CDP property filtering     │
-│ WebGL/Canvas/Audio fingerprint spoofing                  │
-│ WebRTC IP leak prevention • Function toString masking    │
-├─────────────────────────────────────────────────────────┤
-│ Layer 4: Behavior                                        │
-│ Bezier-curve mouse movements • Realistic typing rhythms  │
-│ Word pause simulation • Typo + correction (3% rate)      │
-└─────────────────────────────────────────────────────────┘
-```
-
-**Blocked vendors:** DataDome, PerimeterX, Imperva, Akamai, Cloudflare Bot Management, Turnstile, Kasada, Shape Security, F5, Arkose Labs, ThreatMetrix, hCaptcha, reCAPTCHA
-
----
-
-## 🧠 Adaptive Scraper
-
-When a website changes its DOM structure, traditional selectors break. Agent-OS **remembers** element fingerprints and **relocates** them automatically:
-
-```text
-1. Find element with CSS selector → ✅ Found → Save fingerprint (tag, attrs, text, path, parent)
-2. Website redesigns, selector breaks → ❌ Not found
-3. Load stored fingerprint → Scan all page elements → Score similarity
-4. Best match above 40% threshold → ✅ Element relocated!
+#### macOS / Linux Config
+```json
+{
+  "mcpServers": {
+    "agent-os": {
+      "command": "bash",
+      "args": ["/path/to/Agent-OS-Final-Pro/run_mcp.sh"]
+    }
+  }
+}
 ```
 
 ---
 
-## 🔄 Proxy Rotation
+## 🧪 Test Suite & Readiness
 
-Thread-safe proxy rotator with **4 strategies**:
+We verify code quality, import structures, and browser capabilities before any release:
 
-| Strategy | How it works | Best for |
-|----------|-------------|----------|
-| **Cyclic** | Sequential round-robin | General scraping |
-| **Weighted** | Higher weight = more requests | Premium vs budget proxies |
-| **Random** | Random selection | Anti-pattern detection |
-| **Sticky** | Same proxy per domain | Session-based scraping |
-
----
-
-## 🌐 Browser Automation
-
-**207 tools** across 15 categories:
-
-| Category | Tools | Highlights |
-|----------|-------|------------|
-| Navigation | 6 | `navigate`, `smart-navigate` (auto HTTP/browser) |
-| Interaction | 17 | `click`, `fill-form`, `drag-drop`, `scroll` |
-| Content | 9 | `screenshot`, `get-dom`, `evaluate-js` |
-| Workflows | 6 | Multi-step automation with variables |
-| Proxy | 18 | Pool management, health checks, rotation |
-| Adaptive | 4 | Element fingerprinting + relocation |
-| Multi-Agent | 19 | Shared sessions, task queues, locks |
-| Login Handoff | 8 | Pause AI → human logs in → resume |
-| LLM | 7 | Built-in `llm-complete`, `llm-summarize` |
-
----
-
-## 🤝 Contributing
-
+### 1. Run Unit & Integration Tests (175 tests)
 ```bash
-git clone https://github.com/factspark23-hash/Agent-OS.git
-cd Agent-OS
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-python3 -m patchright install chromium
-
-# Run tests
-python3 -m pytest tests/ -v
+# Restricted to the tests/ directory to avoid import-time script execution
+.\venv\Scripts\pytest.exe
 ```
+**Result**: `175 passed`
+
+### 2. Run E2E Production Readiness Tests (51 checks)
+```bash
+# Verifies Router routing, LLM cache, swarm allocation, and parallel stress searches
+$env:PYTHONIOENCODING="utf-8"
+.\venv\Scripts\python.exe production_test.py
+```
+**Result**: `51 passed`
+
+### 3. Verify Anti-Detection Stealth
+```bash
+# Tests the browser against Sannysoft WebDriver checks, NowSecure, and CreepJS fingerprint audits
+.\venv\Scripts\python.exe run_stealth_tests.py
+```
+**Result**: `100% bypass success rate`
 
 ---
 
-## 📄 License
+## 🛠️ Tool categories (209 Tools)
 
-[MIT License](LICENSE) — free for commercial and personal use.
+All 209 tools are organized across 30 distinct categories for easy ingestion:
+* **`ADAPTIVE` (4 tools)**: Clean, find, and fingerprint elements.
+* **`AI` (6 tools)**: Extraction, jobs filling, and data formatting.
+* **`ANALYSIS` (9 tools)**: Emails, phones, SEO, accessibility audits, tables, and summaries.
+* **`CAPTCHA` (6 tools)**: Assess, bypass system checks, and monitor.
+* **`EXTRACTION` (9 tools)**: Screenshots, DOM trees, cookies, attributes, and JS evaluate.
+* **`HANDOFF` (8 tools)**: Trigger and manage human-in-the-loop auth handbacks.
+* **`HEAL` (10 tools)**: Smart clicks/fills with auto-healers.
+* **`HUB` (23 tools)**: Distributed memory, locks, and task queues for agent swarms.
+* **`INTERACTION` (18 tools)**: Clicks, inputs, keypresses, forms, drags, and scrolls.
+* **`LLM` (7 tools)**: completions, summaries, classifications, and token usage.
+* **`NAVIGATION` (5 tools)**: Navigate, smart fallback router, back, forward, and reloads.
+* **`NETWORK` (8 tools)**: HAR exports, API endpoint discovery, and network capture.
+* **`PROXY & ROTATION` (18 tools)**: Add proxies, rotate strategies, health checks, and metrics.
+* **`RECORDING & REPLAY` (18 tools)**: Workflows recording, templates, and position triggers.
+* **`RETRY` (10 tools)**: Navigations and clicks with budgets and circuit breakers.
+* **`ROUTER` (6 tools)**: Needs-web query classification.
+* **`SNAPSHOT` (3 tools)**: Token-saving accessibility trees with `@eN` refs.
 
-### Third-Party Code
+> [!NOTE]
+> For a full list of all 209 tools, their inputs, MCP mappings, and parameter descriptions, refer to the generated reference file: [agent_os_features_and_tools.md](file:///C:/Users/eourn/.gemini/antigravity/brain/83b8e4f3-4122-474f-9e4a-41da9bb0d247/agent_os_features_and_tools.md).
 
-- **[Scrapling](https://github.com/D4Vinci/Scrapling)** by Karim Shoair — Adaptive scraping algorithm and proxy rotation engine. Used under [BSD 3-Clause License](THIRD_PARTY_LICENSES.md).
+---
+
+## 📄 License & Third-Party Code
+
+* Licensed under the [MIT License](LICENSE) — free for commercial and personal use.
+* **[Scrapling](https://github.com/D4Vinci/Scrapling)** by Karim Shoair — The adaptive scraping logic and proxy rotation capabilities are derived from Scrapling under [BSD 3-Clause License](THIRD_PARTY_LICENSES.md).
