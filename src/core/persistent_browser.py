@@ -191,12 +191,6 @@ class UserContext:
         self._god_stealth = GodModeStealth()
         self._stealth_js = SUPPLEMENTARY_STEALTH_JS
 
-        # Layer 1: CDP stealth (primary anti-detection)
-        cdp_ok = await self._cdp_stealth.inject_into_page(
-            page, page_id="main",
-            chrome_version=fp.get("chrome_version", "124"),
-            fingerprint=fp,
-        )
 
         # Layer 2: Supplementary stealth (Notification, Battery, Font, Beacon)
         layer2_ok = False
