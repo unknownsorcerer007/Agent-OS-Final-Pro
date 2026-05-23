@@ -13,7 +13,7 @@ import traceback
 from dataclasses import dataclass
 from typing import Optional
 
-sys.path.insert(0, "/home/z/my-project/Agent-OS")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ─── Test infrastructure ───
 
@@ -688,7 +688,7 @@ async def main():
         "results": [{"name": r.name, "passed": r.passed, "details": r.details} for r in all_results]
     }
 
-    report_path = "/home/z/my-project/Agent-OS/production_test_results.json"
+    report_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "production_test_results.json")
     with open(report_path, "w") as f:
         json.dump(report, f, indent=2)
     print(f"\n  📄 Report saved: {report_path}")
