@@ -145,7 +145,7 @@ PROVIDER_REGISTRY: Dict[str, Dict[str, Any]] = {
 # Default fallback chain order — cheapest/fastest first
 DEFAULT_FALLBACK_CHAIN = [
     "groq", "deepseek", "together", "google", "mistral",
-    "openai", "anthropic", "xai", "ollama",
+    "openai", "anthropic", "xai",
 ]
 
 
@@ -688,14 +688,18 @@ def auto_detect_provider() -> Optional[Dict[str, Any]]:
     Expanded from the existing _detect_user_provider in config.py
     to support all providers in the registry.
     """
-    # 1. Check explicit LLM_PROVIDER_* env vars first
-    explicit_key = os.getenv("LLM_PROVIDER_API_KEY", "").strip()
+    # 1. Check explicit LLM_PROVIDER_* env vars or setup wizard LLM_* env vars first
+    explicit_key = os.getenv("LLM_PROVIDER_API_KEY", "").strip() or os.getenv("LLM_API_KEY", "").strip()
     if explicit_key:
+        # Determine provider name: check LLM_PROVIDER_NAME, LLM_PROVIDER, or guess from key
+        provider = os.getenv("LLM_PROVIDER_NAME", "").strip() or os.getenv("LLM_PROVIDER", "").strip() or "custom"
+        base_url = os.getenv("LLM_PROVIDER_BASE_URL", "").strip() or os.getenv("LLM_API_BASE", "").strip() or ""
+        model = os.getenv("LLM_PROVIDER_MODEL", "").strip() or os.getenv("LLM_MODEL", "").strip() or "gpt-4o-mini"
         return {
-            "provider": os.getenv("LLM_PROVIDER_NAME", "custom"),
+            "provider": provider,
             "api_key": explicit_key,
-            "base_url": os.getenv("LLM_PROVIDER_BASE_URL", ""),
-            "model": os.getenv("LLM_PROVIDER_MODEL", "gpt-4o-mini"),
+            "base_url": base_url,
+            "model": model,
         }
 
     # 2. Check SWARM_PROVIDER_* vars (backward compatibility)
@@ -715,21 +719,22 @@ def auto_detect_provider() -> Optional[Dict[str, Any]]:
 
         # Special handling for Ollama (no API key needed)
         if provider_name == "ollama":
-            # Check if Ollama is running
-            ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
-            try:
-                import urllib.request
-                req = urllib.request.Request(f"{ollama_host.replace('/v1', '')}/api/tags", method="GET")
-                with urllib.request.urlopen(req, timeout=2) as resp:
-                    if resp.status == 200:
-                        return {
-                            "provider": "ollama",
-                            "api_key": "ollama",
-                            "base_url": f"{ollama_host.rstrip('/')}/v1",
-                            "model": config["default_model"],
-                        }
-            except Exception:
-                pass
+            # Check if Ollama is running ONLY if explicitly requested via OLLAMA_HOST
+            ollama_host = os.getenv("OLLAMA_HOST", "").strip()
+            if ollama_host:
+                try:
+                    import urllib.request
+                    req = urllib.request.Request(f"{ollama_host.replace('/v1', '')}/api/tags", method="GET")
+                    with urllib.request.urlopen(req, timeout=2) as resp:
+                        if resp.status == 200:
+                            return {
+                                "provider": "ollama",
+                                "api_key": "ollama",
+                                "base_url": f"{ollama_host.rstrip('/')}/v1",
+                                "model": config["default_model"],
+                            }
+                except Exception:
+                    pass
             continue
 
         # Special handling for Azure OpenAI
@@ -797,21 +802,22 @@ def detect_available_providers() -> List[Dict[str, Any]]:
         api_key = os.getenv(env_key, "").strip()
 
         if provider_name == "ollama":
-            ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
-            try:
-                import urllib.request
-                req = urllib.request.Request(f"{ollama_host.replace('/v1', '')}/api/tags", method="GET")
-                with urllib.request.urlopen(req, timeout=2) as resp:
-                    if resp.status == 200:
-                        available.append({
-                            "provider": "ollama",
-                            "api_key": "ollama",
-                            "base_url": f"{ollama_host.rstrip('/')}/v1",
-                            "model": config["default_model"],
-                        })
-                        seen_providers.add("ollama")
-            except Exception:
-                pass
+            ollama_host = os.getenv("OLLAMA_HOST", "").strip()
+            if ollama_host:
+                try:
+                    import urllib.request
+                    req = urllib.request.Request(f"{ollama_host.replace('/v1', '')}/api/tags", method="GET")
+                    with urllib.request.urlopen(req, timeout=2) as resp:
+                        if resp.status == 200:
+                            available.append({
+                                "provider": "ollama",
+                                "api_key": "ollama",
+                                "base_url": f"{ollama_host.rstrip('/')}/v1",
+                                "model": config["default_model"],
+                            })
+                            seen_providers.add("ollama")
+                except Exception:
+                    pass
             continue
 
         if api_key:

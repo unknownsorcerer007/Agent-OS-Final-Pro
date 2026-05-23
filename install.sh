@@ -23,7 +23,7 @@ START_AFTER=true
 NO_SUDO=false
 AGENT_TOKEN=""
 EXTRA_ARGS=""
-REPO_URL="https://github.com/factspark23-hash/Agent-OS.git"
+REPO_URL="https://github.com/factspark23-hash/Agent-OS-Final-Pro.git"
 
 # ─── Parse Args ──────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -250,13 +250,26 @@ ok "System dependencies ready"
 # ─── Step 6: Python Dependencies ────────────────────────
 step "Installing Python packages..."
 pip install --upgrade pip -q 2>&1 | tail -1
+
+export AIOHTTP_NO_EXTENSIONS=1
+export YARL_NO_EXTENSIONS=1
+export MULTIDICT_NO_EXTENSIONS=1
+export FROZENLIST_NO_EXTENSIONS=1
+
 REQ_FILE="requirements.lock"
 [ ! -f "$REQ_FILE" ] && REQ_FILE="requirements.txt"
-pip install -r "$REQ_FILE" --no-cache-dir 2>&1 | tail -5 || {
+pip install --prefer-binary -r "$REQ_FILE" --no-cache-dir 2>&1 | tail -5 || {
     warn "Some packages failed. Retrying with --no-build-isolation..."
-    pip install -r "$REQ_FILE" --no-build-isolation 2>&1 | tail -5 || true
+    pip install --prefer-binary -r "$REQ_FILE" --no-build-isolation 2>&1 | tail -5 || true
 }
 ok "Python packages installed"
+
+step "Installing optional CAPTCHA solver (ddddocr)..."
+if pip install ddddocr --no-cache-dir 2>&1 | tail -5; then
+    ok "ddddocr installed successfully"
+else
+    warn "ddddocr installation failed or skipped (common on Python 3.13+ or systems without C++ compilers). Core browser automation is fully functional."
+fi
 
 # ─── Step 7: Playwright Chromium ────────────────────────
 step "Installing Chromium browser..."
@@ -333,7 +346,7 @@ ERRORS=0
 for pair in "playwright:playwright" "websockets:websockets" "aiohttp:aiohttp" "httpx:httpx" "cryptography:cryptography" "beautifulsoup4:bs4" "lxml:lxml" "PyYAML:yaml" "psutil:psutil" "numpy:numpy" "mcp:mcp" "curl_cffi:curl_cffi" "cloudscraper:cloudscraper" "redis:redis" "sqlalchemy:sqlalchemy" "pydantic:pydantic"; do
     PKG="${pair%%:*}"
     IMP="${pair##*:}"
-    python -c "import $IMP" 2>/dev/null || { warn "Import failed: $PKG (as $IMP)"; ERRORS=$((ERRORS+1)); }
+    python -c "import sys, types; sys.modules['crypt'] = types.ModuleType('crypt'); import $IMP" 2>/dev/null || { warn "Import failed: $PKG (as $IMP)"; ERRORS=$((ERRORS+1)); }
 done
 
 if [ $ERRORS -gt 0 ]; then

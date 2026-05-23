@@ -67,22 +67,13 @@ openai>=1.30.0
 
 # ─── Open-Source Stealth & Anti-Detection ─────────────────────
 
-# Camoufox: Firefox-based anti-detect browser with C++ fingerprint injection
-# Wraps Playwright API — drop-in alternative for high-stealth sessions
-# License: GPL-3.0 (library wrapper is MIT-compatible via pip)
-camoufox>=0.4.0
-
-# Playwright stealth: JavaScript evasion patches for Playwright browsers
-# Supplements CDP stealth with additional navigator/webgl/canvas patches
-# License: MIT
-playwright-stealth>=2.0.0
-
 # ─── Free CAPTCHA Solving (No Paid Services) ──────────────────
 
 # ddddocr: Offline deep-learning OCR for text/simple captchas
 # No API key needed — runs locally, trained on common captcha styles
 # License: Apache-2.0
-ddddocr>=1.5.0
+# ddddocr>=1.5.0
+
 
 # pytesseract: Python wrapper for Google Tesseract OCR engine
 # Best-in-class open-source OCR for text captchas, requires tesseract binary

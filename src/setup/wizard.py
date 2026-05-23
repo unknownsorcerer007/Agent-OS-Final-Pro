@@ -138,6 +138,64 @@ class SetupWizard:
         print(f"  Free alternative: {integration['free_alternative']}")
         print()
 
+        if key == "llm":
+            if not self._ask_yes_no(f"  Configure LLM API Key?", default=False):
+                print(f"  Skipped. (You can add later with --setup)")
+                return result
+
+            print()
+            print("  Select LLM Provider:")
+            print("    1) OpenAI (gpt-4o-mini)")
+            print("    2) Anthropic Claude (claude-3-5-haiku-20241022)")
+            print("    3) Google Gemini (gemini-2.0-flash)")
+            print("    4) DeepSeek (deepseek-chat)")
+            print("    5) Groq (llama-3.3-70b-versatile)")
+            print("    6) Custom OpenAI-Compatible endpoint")
+            print("    7) Skip")
+            print()
+            choice = self._ask_input("Select LLM Provider (1-7)", default="7", optional=False)
+            if choice == "1":
+                key_val = self._ask_input("OPENAI_API_KEY", optional=True)
+                if key_val:
+                    result["OPENAI_API_KEY"] = key_val
+                    result["LLM_PROVIDER_NAME"] = "openai"
+                    result["LLM_PROVIDER_MODEL"] = "gpt-4o-mini"
+            elif choice == "2":
+                key_val = self._ask_input("ANTHROPIC_API_KEY", optional=True)
+                if key_val:
+                    result["ANTHROPIC_API_KEY"] = key_val
+                    result["LLM_PROVIDER_NAME"] = "anthropic"
+                    result["LLM_PROVIDER_MODEL"] = "claude-3-5-haiku-20241022"
+            elif choice == "3":
+                key_val = self._ask_input("GOOGLE_API_KEY", optional=True)
+                if key_val:
+                    result["GOOGLE_API_KEY"] = key_val
+                    result["LLM_PROVIDER_NAME"] = "google"
+                    result["LLM_PROVIDER_MODEL"] = "gemini-2.0-flash"
+            elif choice == "4":
+                key_val = self._ask_input("DEEPSEEK_API_KEY", optional=True)
+                if key_val:
+                    result["DEEPSEEK_API_KEY"] = key_val
+                    result["LLM_PROVIDER_NAME"] = "deepseek"
+                    result["LLM_PROVIDER_MODEL"] = "deepseek-chat"
+            elif choice == "5":
+                key_val = self._ask_input("GROQ_API_KEY", optional=True)
+                if key_val:
+                    result["GROQ_API_KEY"] = key_val
+                    result["LLM_PROVIDER_NAME"] = "groq"
+                    result["LLM_PROVIDER_MODEL"] = "llama-3.3-70b-versatile"
+            elif choice == "6":
+                prov_name = self._ask_input("LLM_PROVIDER_NAME (e.g. together, mistral, custom)", optional=True)
+                key_val = self._ask_input("LLM_PROVIDER_API_KEY", optional=True)
+                base_url = self._ask_input("LLM_PROVIDER_BASE_URL", optional=True)
+                model = self._ask_input("LLM_PROVIDER_MODEL", optional=True)
+                if key_val:
+                    result["LLM_PROVIDER_API_KEY"] = key_val
+                    if prov_name: result["LLM_PROVIDER_NAME"] = prov_name
+                    if base_url: result["LLM_PROVIDER_BASE_URL"] = base_url
+                    if model: result["LLM_PROVIDER_MODEL"] = model
+            return result
+
         if not self._ask_yes_no(f"  Add {integration['name']} key?", default=False):
             print(f"  Skipped. (You can add later with --setup)")
             return result

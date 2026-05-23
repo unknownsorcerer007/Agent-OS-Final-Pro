@@ -165,6 +165,11 @@ echo "🔍 Verifying installation..."
 
 $PYTHON_CMD -c "
 import sys
+try:
+    import crypt
+except ImportError:
+    import types
+    sys.modules['crypt'] = types.ModuleType('crypt')
 errors = []
 
 # Module name -> actual import name

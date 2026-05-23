@@ -2140,6 +2140,20 @@ class AgentBrowser:
             except Exception:
                 pass
 
+        # SmartElementFinder fallback for natural language or fuzzy text selectors
+        try:
+            from src.tools.smart_finder import SmartElementFinder
+            finder = SmartElementFinder(self)
+            smart_res = await finder.find(selector, timeout=2000)
+            if smart_res.get("found"):
+                resolved_sel = smart_res["selector"]
+                el = await page.query_selector(resolved_sel)
+                if el:
+                    logger.info(f"SmartElementFinder resolved selector '{selector}' to CSS selector '{resolved_sel}'")
+                    return el, resolved_sel
+        except Exception as se_err:
+            logger.debug(f"SmartElementFinder fallback failed: {se_err}")
+
         return None, None
 
     # ─── Form Fill — Framework-Compatible ───────────────────────

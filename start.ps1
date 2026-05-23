@@ -5,6 +5,10 @@
     Starts the Agent-OS server using the virtual environment.
 #>
 
+if ($PSScriptRoot) {
+    Set-Location $PSScriptRoot
+}
+
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "           Starting Agent-OS             " -ForegroundColor Cyan
 Write-Host "=========================================" -ForegroundColor Cyan

@@ -17,6 +17,12 @@ import asyncio
 import argparse
 import signal
 import sys
+# Monkeypatch 'crypt' for Python 3.13+ compatibility before passlib is imported
+try:
+    import crypt
+except ImportError:
+    import types
+    sys.modules['crypt'] = types.ModuleType('crypt')
 import psutil
 import os
 from pathlib import Path
@@ -450,10 +456,14 @@ async def main():
         if "address already in use" in str(e).lower() or e.errno == 98:
             ws_port = app.config.get("server.ws_port", 8000)
             http_port = app.config.get("server.http_port", 8001)
+            if os.name == "nt":
+                kill_cmd = f"Get-Process -Id (Get-NetTCPConnection -LocalPort {ws_port}).OwningProcess | Stop-Process -Force"
+            else:
+                kill_cmd = f"lsof -i :{ws_port} -i :{http_port}"
             app.logger.error(
                 f"Port conflict detected! Another process is using port {ws_port} or {http_port}.\n"
                 f"  Fix: Change the port with --port <number> (e.g., --port 9000)\n"
-                f"  Or:  Kill the existing process: lsof -i :{ws_port} -i :{http_port}"
+                f"  Or:  Kill the existing process: {kill_cmd}"
             )
             await app.stop()
             sys.exit(1)

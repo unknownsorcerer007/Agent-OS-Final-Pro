@@ -35,12 +35,29 @@ Write-Host "Virtual environment is ready." -ForegroundColor Green
 # 3. Install Requirements
 Write-Host "[3/4] Installing dependencies from requirements.txt..." -ForegroundColor Yellow
 .\venv\Scripts\python.exe -m pip install --upgrade pip
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
+
+# Set environment variables to install pure-Python fallbacks if binary wheels are not available
+$env:AIOHTTP_NO_EXTENSIONS = "1"
+$env:YARL_NO_EXTENSIONS = "1"
+$env:MULTIDICT_NO_EXTENSIONS = "1"
+$env:FROZENLIST_NO_EXTENSIONS = "1"
+
+.\venv\Scripts\python.exe -m pip install --prefer-binary -r requirements.txt
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to install Python dependencies." -ForegroundColor Red
     exit 1
 }
 Write-Host "Dependencies installed successfully." -ForegroundColor Green
+
+# Optional CAPTCHA solver ddddocr
+Write-Host "Installing optional CAPTCHA solver ddddocr..." -ForegroundColor Yellow
+.\venv\Scripts\python.exe -m pip install ddddocr
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "ddddocr installation skipped or failed (common on Python 3.13+ or systems without C++ compilers). Core browser automation is fully functional." -ForegroundColor Yellow
+} else {
+    Write-Host "ddddocr installed successfully." -ForegroundColor Green
+}
+
 
 # 4. Install Patchright Browsers
 Write-Host "[4/4] Installing Patchright / Playwright browsers..." -ForegroundColor Yellow

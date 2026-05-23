@@ -30,6 +30,11 @@
 
 set -e
 
+# Redirect all helper outputs to stderr to prevent JSON-RPC corruption
+echo() {
+    builtin echo "$@" >&2
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
@@ -116,7 +121,7 @@ start_server() {
         --port "$PORT" \
         $HEADED \
         --json-logs \
-        &
+        > agent_os_server.log 2>&1 &
     
     SERVER_PID=$!
     echo $SERVER_PID > .agent-os-server.pid

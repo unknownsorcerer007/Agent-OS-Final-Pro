@@ -23,37 +23,63 @@ from mcp.types import Tool, TextContent, ImageContent, EmbeddedResource
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from connectors._tool_registry import TOOLS, get_command_map, get_mcp_tools
 
-# Try to load token from .env if it exists
-_env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
-if os.path.exists(_env_file):
-    with open(_env_file, "r") as f:
-        for line in f:
-            if line.startswith("AGENT_TOKEN="):
-                os.environ.setdefault("AGENT_OS_TOKEN", line.split("=", 1)[1].strip().strip('"').strip("'"))
+def resolve_agent_token() -> str:
+    # 1. Environment Variable
+    token = os.environ.get("AGENT_OS_TOKEN")
+    if token:
+        return token
+
+    # 2. Try .env in repo root or ~/.agent-os/.env
+    repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    paths = [
+        os.path.join(repo_dir, ".env"),
+        os.path.expanduser("~/.agent-os/.env")
+    ]
+    for path in paths:
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line or line.startswith("#"):
+                            continue
+                        if "=" in line:
+                            k, v = line.split("=", 1)
+                            k = k.strip()
+                            v = v.strip().strip('"').strip("'")
+                            if k in ("AGENT_TOKEN", "AGENT_OS_TOKEN") and v:
+                                return v
+            except Exception:
+                pass
+
+    # 3. Try config.yaml in ~/.agent-os/ or repo root
+    config_paths = [
+        os.path.expanduser("~/.agent-os/config.yaml"),
+        os.path.join(repo_dir, "config.yaml")
+    ]
+    for path in config_paths:
+        if os.path.exists(path):
+            try:
+                import yaml
+                with open(path, "r", encoding="utf-8") as f:
+                    cfg = yaml.safe_load(f)
+                    if cfg and isinstance(cfg, dict):
+                        t = cfg.get("server", {}).get("agent_token")
+                        if t:
+                            return t
+            except Exception:
+                pass
+
+    # 4. Fallback to generating a temp token
+    import secrets
+    fallback_token = secrets.token_urlsafe(32)
+    print(f"WARNING: AGENT_OS_TOKEN not set or found. Generated temp token: {fallback_token}", file=sys.stderr)
+    return fallback_token
 
 AGENT_OS_URL = os.environ.get("AGENT_OS_URL", "http://localhost:8001")
-AGENT_OS_TOKEN = os.environ.get("AGENT_OS_TOKEN")
+AGENT_OS_TOKEN = resolve_agent_token()
 
-if not AGENT_OS_TOKEN:
-    # Try to read from config.yaml
-    _config_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.yaml")
-    if os.path.exists(_config_file):
-        try:
-            import yaml
-            with open(_config_file, "r") as f:
-                _config = yaml.safe_load(f)
-                if _config and _config.get("server", {}).get("agent_token"):
-                    AGENT_OS_TOKEN = _config["server"]["agent_token"]
-        except Exception:
-            pass
-
-if not AGENT_OS_TOKEN:
-    import secrets
-    AGENT_OS_TOKEN = secrets.token_urlsafe(32)
-    print(f"WARNING: AGENT_OS_TOKEN not set. Generated temp token: {AGENT_OS_TOKEN}", file=sys.stderr)
-    print("Set this as AGENT_OS_TOKEN env var for persistent access.", file=sys.stderr)
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(message)s", stream=sys.stderr)
 logger = logging.getLogger("agent-os-mcp")
 
 # ─── Persistent HTTP Client ──────────────────────────────────
