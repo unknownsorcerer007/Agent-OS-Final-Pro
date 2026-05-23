@@ -173,17 +173,14 @@ Open the configuration file and add the following entry under `"mcpServers"`.
 > [!IMPORTANT]
 > If you started the server with a custom `--agent-token` passcode (e.g., `--agent-token "my-custom-password"`), you **MUST** provide it inside the `"env"` block as `AGENT_OS_TOKEN` so that the connector can authenticate. You can set this token to **any arbitrary string or password** of your choice.
 
-##### Windows Configuration
+##### Windows Configuration (Single Command)
 ```json
 {
   "mcpServers": {
     "agent-os": {
-      "command": "powershell.exe",
+      "command": "C:/Users/YOUR_USER/path/to/Agent-OS-Final-Pro/venv/Scripts/python.exe",
       "args": [
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "C:/Users/YOUR_USER/.gemini/antigravity/scratch/repo/Agent-OS-Final-Pro-main/run_mcp.ps1"
+        "C:/Users/YOUR_USER/path/to/Agent-OS-Final-Pro/connectors/mcp_passthrough.py"
       ],
       "env": {
         "AGENT_OS_TOKEN": "dev-token"
@@ -193,14 +190,14 @@ Open the configuration file and add the following entry under `"mcpServers"`.
 }
 ```
 
-##### macOS / Linux Configuration
+##### macOS / Linux Configuration (Single Command)
 ```json
 {
   "mcpServers": {
     "agent-os": {
-      "command": "bash",
+      "command": "/path/to/Agent-OS-Final-Pro/venv/bin/python",
       "args": [
-        "/path/to/Agent-OS-Final-Pro/run_mcp.sh"
+        "/path/to/Agent-OS-Final-Pro/connectors/mcp_passthrough.py"
       ],
       "env": {
         "AGENT_OS_TOKEN": "dev-token"
