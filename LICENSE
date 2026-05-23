@@ -1,21 +1,23 @@
-MIT License
+Agent-OS Personal and Non-Commercial License
 
-Copyright (c) 2026 Agent-OS Contributors
+Copyright (c) 2026 Agent-OS Project Contributors
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+TERMS AND CONDITIONS
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Grant of License
+Subject to the terms and conditions of this License, the copyright owners hereby grant you a worldwide, royalty-free, non-exclusive, non-transferable, and limited license to download, run, copy, and modify this software solely for personal, educational, research, and non-commercial testing purposes.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Commercial and Production Use Restrictions
+Any commercial, business, or production use of this software, or use by any entity generating revenue, or use within any enterprise, corporation, or government agency, is strictly prohibited. Large companies, commercial entities, startups, and software houses are prohibited from deploying, running, or integrating this software at a production level or inside any commercial applications.
+
+3. Commercial Licensing
+If you or your organization wish to use this software for commercial, production, business, or enterprise purposes, you must obtain an explicit, written commercial license agreement from the copyright owners.
+
+4. Redistribution
+You may redistribute copies of this software, provided that:
+- You include this exact LICENSE file in all copies.
+- You do not charge any fee for the software itself.
+- You do not redistribute it for commercial, business, or enterprise use.
+
+5. Disclaimer of Warranty
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

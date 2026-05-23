@@ -256,7 +256,6 @@ All 209 tools are organized across 30 distinct categories for easy ingestion:
 
 ---
 
-## 📄 License & Third-Party Code
+## 📄 License
 
-* Licensed under the [MIT License](LICENSE) — free for commercial and personal use.
-* **[Scrapling](https://github.com/D4Vinci/Scrapling)** by Karim Shoair — The adaptive scraping logic and proxy rotation capabilities are derived from Scrapling under [BSD 3-Clause License](THIRD_PARTY_LICENSES.md).
+* Licensed under the [Agent-OS Personal and Non-Commercial License](LICENSE) — free for personal, educational, and testing use. Commercial or production use by any business entity is strictly prohibited.
