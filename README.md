@@ -127,6 +127,9 @@ cd Agent-OS-Final-Pro
 ./venv/bin/python main.py --agent-token "dev-token"
 ```
 
+> [!TIP]
+> **Custom Security Passcode**: The `--agent-token` argument defines the security key for the server. You can set this to **any arbitrary custom string or password** you want. This key prevents unauthorized access to your browser control API. The same string must be used in your MCP connector or client configuration.
+
 ### 🐳 Docker Deployment
 
 ```bash
@@ -143,31 +146,59 @@ docker compose up -d
 Agent-OS supports 7 connector pipelines to wire into your favorite agentic stack.
 
 ### Model Context Protocol (MCP) Setup
-To connect Agent-OS browser tools to **Claude Desktop** or **Cursor**, add the following server configuration to your `claude_desktop_config.json`:
 
-#### Windows Config
+You can connect Agent-OS browser tools directly to **Claude Desktop** or **Cursor** to let AI agents run browser commands.
+
+#### Step 1: Locate your Claude Desktop configuration file
+* **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+* **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+* **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+#### Step 2: Add the server configuration
+Open the configuration file and add the following entry under `"mcpServers"`. 
+
+> [!IMPORTANT]
+> If you started the server with a custom `--agent-token` passcode (e.g., `--agent-token "my-custom-password"`), you **MUST** provide it inside the `"env"` block as `AGENT_OS_TOKEN` so that the connector can authenticate. You can set this token to **any arbitrary string or password** of your choice.
+
+##### Windows Configuration
 ```json
 {
   "mcpServers": {
     "agent-os": {
       "command": "powershell.exe",
-      "args": ["-ExecutionPolicy", "Bypass", "-File", "C:/Users/YOUR_USER/.gemini/antigravity/scratch/repo/Agent-OS-Final-Pro-main/run_mcp.ps1"]
+      "args": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:/Users/YOUR_USER/.gemini/antigravity/scratch/repo/Agent-OS-Final-Pro-main/run_mcp.ps1"
+      ],
+      "env": {
+        "AGENT_OS_TOKEN": "dev-token"
+      }
     }
   }
 }
 ```
 
-#### macOS / Linux Config
+##### macOS / Linux Configuration
 ```json
 {
   "mcpServers": {
     "agent-os": {
       "command": "bash",
-      "args": ["/path/to/Agent-OS-Final-Pro/run_mcp.sh"]
+      "args": [
+        "/path/to/Agent-OS-Final-Pro/run_mcp.sh"
+      ],
+      "env": {
+        "AGENT_OS_TOKEN": "dev-token"
+      }
     }
   }
 }
 ```
+
+#### Step 3: Restart Claude Desktop
+Restart the Claude Desktop application. You will see a new hammer icon or tool dropdown containing the 209 browser automation tools.
 
 ---
 
