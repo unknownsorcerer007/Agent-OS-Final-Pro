@@ -12,7 +12,7 @@
 
 > [!IMPORTANT]
 > **Project Acquisition & Sponsorship Notice**  
-> Agent-OS is currently open for **acquisition or corporate sponsorship**. If you are an AI startup, developer tool company, or enterprise looking to acquire the technology stack, codebase IP, or sponsor its ongoing development, please contact the repository owners. *Serious inquiries only.*
+> Agent-OS is currently open for **acquisition or corporate sponsorship**. If you are an AI startup, developer tool company, or enterprise looking to acquire the technology stack, codebase IP, or sponsor its ongoing development, please contact us at **[unknownsorcerer007@gmail.com](mailto:unknownsorcerer007@gmail.com)**. *Serious inquiries only.*
 
 <p align="center">
     <a href="LICENSE">
