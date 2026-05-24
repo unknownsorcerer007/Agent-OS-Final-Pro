@@ -168,7 +168,7 @@ class DynamicSseServerTransport(SseServerTransport):
             host = forwarded_host
             
         base_url = f"{proto}://{host}"
-        session_uri = f"{base_url}/sse?session_id={session_id.hex}"
+        session_uri = f"{base_url}/messages?session_id={session_id.hex}"
         
         self._read_stream_writers[session_id] = read_stream_writer
         logger.info(f"Created new session with ID: {session_id}, absolute messages URL: {session_uri}")
@@ -324,14 +324,64 @@ async def handle_sse(request: Request):
             server.create_initialization_options()
         )
 
-@app.post("/sse")
-async def handle_post_sse(request: Request):
-    auth_header = request.headers.get("Authorization")
-    if not auth_header or not auth_header.startswith("Bearer "):
-        return JSONResponse(status_code=401, content={"error": "unauthorized"})
-    return await sse.handle_post_message(request)
+# ─── ASGI middleware to intercept POST /messages ──────────────
+# Using middleware instead of app.mount() to avoid Starlette's
+# automatic 307 trailing-slash redirect on mounted sub-apps.
+
+_inner_app = app.middleware_stack  # Will be set after build
+
+class _MessagePostMiddleware:
+    """ASGI middleware that intercepts POST /messages* requests and
+    delegates them to handle_post_message as a raw ASGI app, bypassing
+    FastAPI's route handler entirely (avoids double-response errors)."""
+
+    def __init__(self, app_inner, transport: SseServerTransport):
+        self._app = app_inner
+        self._transport = transport
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+        if scope["type"] == "http":
+            path = scope.get("path", "")
+            method = scope.get("method", "GET")
+            
+            if method == "POST" and path.startswith("/messages"):
+                # Check auth
+                headers_list = scope.get("headers", [])
+                auth_val = b""
+                for hdr_name, hdr_value in headers_list:
+                    if hdr_name == b"authorization":
+                        auth_val = hdr_value
+                        break
+                if not auth_val.startswith(b"Bearer "):
+                    from starlette.responses import JSONResponse as _JR
+                    resp = _JR(status_code=401, content={"error": "unauthorized"})
+                    await resp(scope, receive, send)
+                    return
+                logger.info(f"POST /messages authenticated, delegating to handle_post_message")
+                await self._transport.handle_post_message(scope, receive, send)
+                return
+
+        await self._app(scope, receive, send)
+
+
+# Wrap the FastAPI app with our middleware
+_original_app_call = app.__class__.__call__
+
+class WrappedApp:
+    """Wraps the FastAPI ASGI app with the message POST middleware."""
+    def __init__(self, fastapi_app, transport):
+        self._fastapi_app = fastapi_app
+        self._middleware = None
+        self._transport = transport
+    
+    async def __call__(self, scope, receive, send):
+        if self._middleware is None:
+            self._middleware = _MessagePostMiddleware(self._fastapi_app, self._transport)
+        await self._middleware(scope, receive, send)
+
+_wrapped = WrappedApp(app, sse)
 
 if __name__ == "__main__":
     import uvicorn
-    # Start on port 8002
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    # Start on port 8002 — use the wrapped app for middleware support
+    uvicorn.run(_wrapped, host="0.0.0.0", port=8002)

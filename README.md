@@ -55,6 +55,21 @@
 
 ---
 
+> [!NOTE]
+> ## 🚀 Coming Soon — 2 New Features Dropping in 6 Days!
+> 
+> We're shipping **two major features** on **May 30, 2026**. Here's a sneak peek:
+> 
+> ### 🌐 Feature 1: Claude Web Direct Connect (MCP over SSE)
+> Connect Agent-OS **directly from Claude.ai web interface** — no desktop app, no API keys, no local setup required. Just paste a public URL into Claude's Custom Connector and start controlling the browser from the cloud. Powered by MCP over Server-Sent Events with built-in OAuth 2.1 auto-discovery.
+> 
+> ### 🧠 Feature 2: AI Visual Testing Engine
+> A brand-new **visual regression testing** module that uses AI vision to detect UI changes, layout shifts, and visual bugs across pages. Take baseline snapshots, compare against new deployments, and get pixel-level diff reports — all orchestrated through natural language commands.
+> 
+> 🐦 **Follow for updates**: **[Twitter/X](https://x.com/Unknown339264)**
+
+---
+
 ## 🌐 What is Agent-OS?
 
 **Agent-OS** is an operating system layer that gives AI agents a **real, persistent, and self-hosted web browser** with zero-friction installation. 
