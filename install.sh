@@ -256,8 +256,9 @@ export YARL_NO_EXTENSIONS=1
 export MULTIDICT_NO_EXTENSIONS=1
 export FROZENLIST_NO_EXTENSIONS=1
 
-REQ_FILE="requirements.lock"
-[ ! -f "$REQ_FILE" ] && REQ_FILE="requirements.txt"
+# Prioritize requirements.txt to allow pip to resolve relaxed dependencies
+REQ_FILE="requirements.txt"
+[ ! -f "$REQ_FILE" ] && REQ_FILE="requirements.lock"
 pip install --prefer-binary -r "$REQ_FILE" --no-cache-dir 2>&1 | tail -5 || {
     warn "Some packages failed. Retrying with --no-build-isolation..."
     pip install --prefer-binary -r "$REQ_FILE" --no-build-isolation 2>&1 | tail -5 || true
@@ -274,15 +275,17 @@ fi
 # ─── Step 7: Playwright Chromium ────────────────────────
 step "Installing Chromium browser..."
 
-# Try patchright first (project dependency), fall back to playwright
-BROWSER_CMD=""
-if python -c "import patchright" 2>/dev/null; then
-    BROWSER_CMD="patchright"
-elif python -c "import playwright" 2>/dev/null; then
-    BROWSER_CMD="playwright"
-else
-    warn "Neither patchright nor playwright installed — skipping browser download"
-fi
+    # Try patchright first (project dependency), fall back to playwright
+    BROWSER_CMD=""
+    if python -c "import patchright" 2>/dev/null; then
+        BROWSER_CMD="patchright"
+    elif python -c "import playwright" 2>/dev/null; then
+        BROWSER_CMD="playwright"
+    else
+        # Force install patchright if missing before browser download
+        pip install patchright playwright --no-cache-dir -q
+        BROWSER_CMD="patchright"
+    fi
 
 if [ -n "$BROWSER_CMD" ]; then
     echo -e "  ${CYAN}Downloading Chromium via ${BROWSER_CMD}...${NC}"

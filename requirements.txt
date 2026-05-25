@@ -1,106 +1,60 @@
 # Agent-OS Requirements — Production Edition
 # Core browser automation
 patchright>=1.50.0
+playwright>=1.49.0
 
 # WebSocket server for agent connections
-websockets==13.1
-aiohttp==3.11.11
+websockets>=13.1
+aiohttp>=3.10.0
 
 # HTTP client (used by connectors)
-httpx==0.28.1
+httpx>=0.27.0
 
 # Security & encryption
-cryptography==44.0.2
+cryptography>=42.0.0
 
 # Anti-detection evasion engines
-curl_cffi>=0.15.0         # curl-impersonate: browser-grade TLS fingerprint (Chrome 146+)
-cloudscraper>=1.2.71       # Cloudflare v1/v2/v3 + Turnstile challenge solver
+curl_cffi>=0.15.0         # curl-impersonate: browser-grade TLS fingerprint
+cloudscraper>=1.2.71       # Cloudflare solver
 
 # Bug bounty / scanning tools
-beautifulsoup4==4.12.3
-lxml>=5.3.0
+beautifulsoup4>=4.12.0
+lxml>=5.2.0
 
 # Configuration
-pyyaml==6.0.2
+pyyaml>=6.0.0
 
 # Utilities
-requests==2.32.3
-psutil>=6.1.1
+requests>=2.31.0
+urllib3<2.0.0              # Keep compatibility with older requests/cloudscraper
+psutil>=5.9.0
 
 # Human mimicry
-numpy>=1.26.4
+numpy>=1.24.0
 
-# MCP protocol support (for Claude Desktop / Codex)
-mcp==1.6.0
+# MCP protocol support
+mcp>=1.5.0
 
 # Testing
-pytest==8.3.4
-pytest-asyncio==0.25.3
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
 
 # ─── Production Infrastructure ───────────────────────────────
+sqlalchemy[asyncio]>=2.0.0
+asyncpg>=0.29.0
+alembic>=1.13.0
+redis>=5.0.0
+PyJWT>=2.7.0
+bcrypt>=4.0.0
+passlib>=1.7.4
+pydantic>=2.0.0
+structlog>=24.1.0
 
-# Database ORM + async PostgreSQL
-sqlalchemy[asyncio]==2.0.49
-asyncpg==0.31.0
-alembic==1.18.4
-
-# Redis for distributed rate limiting, sessions, pub/sub
-redis[hiredis]==7.4.0
-
-# JWT authentication
-PyJWT==2.7.0
-
-# Password hashing
-bcrypt>=4.0.1
-passlib==1.7.4
-
-# Input validation
-pydantic==2.12.5
-
-# Structured logging
-structlog==25.5.0
-
-# ─── Agent Swarm Dependencies ─────────────────────────────────
-
-# OpenAI-compatible LLM client (for Tier 2 routing fallback)
-openai>=1.30.0
-
-# ─── Open-Source Stealth & Anti-Detection ─────────────────────
-
-# ─── Free CAPTCHA Solving (No Paid Services) ──────────────────
-
-# ddddocr: Offline deep-learning OCR for text/simple captchas
-# No API key needed — runs locally, trained on common captcha styles
-# License: Apache-2.0
-# ddddocr>=1.5.0
-
-
-# pytesseract: Python wrapper for Google Tesseract OCR engine
-# Best-in-class open-source OCR for text captchas, requires tesseract binary
-# License: Apache-2.0
+# ─── Swarm & AI ──────────────────────────────────────────────
+openai>=1.20.0
+ddddocr>=1.4.0
 pytesseract>=0.3.10
-
-# Pillow: Image processing for captcha preprocessing (resize, threshold, denoise)
-# Required by both ddddocr and pytesseract for image manipulation
-# License: HPND (MIT-compatible)
 Pillow>=10.0.0
-
-# ─── Data Extraction ──────────────────────────────────────────
-
-# trafilatura: State-of-the-art web text extraction (beats BeautifulSoup)
-# Metadata-aware, handles boilerplate removal, extracts clean article text
-# License: Apache-2.0
 trafilatura>=1.8.0
-
-# readability-lxml: Article main-content extraction (Mozilla Readability port)
-# Extracts just the article body + title from noisy HTML pages
-# License: Apache-2.0
 readability-lxml>=0.8.1
-
-# ─── Browser Automation Alternatives ─────────────────────────
-
-# DrissionPage: Python browser automation combining driver + session modes
-# Can switch between browser control and HTTP requests seamlessly
-# Useful as fallback when Playwright fails on certain sites
-# License: MIT
-DrissionPage>=4.1.0
+DrissionPage>=4.0.0
