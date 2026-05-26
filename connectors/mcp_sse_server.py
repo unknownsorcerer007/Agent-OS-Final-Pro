@@ -288,8 +288,305 @@ async def oauth_authorize(
     code_challenge_method: str = None
 ):
     redirect_url = f"{redirect_uri}?code=mock-authorization-code&state={state}"
-    logger.info(f"OAuth Authorize redirecting to: {redirect_url}")
-    return RedirectResponse(url=redirect_url)
+    logger.info(f"OAuth Authorize rendering consent page for: {redirect_url}")
+    
+    html_content = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authorize Agent-OS Connection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {{
+            --bg-color: #0b0c10;
+            --card-bg: rgba(22, 24, 30, 0.7);
+            --border-color: rgba(138, 43, 226, 0.2);
+            --glow-color: rgba(138, 43, 226, 0.6);
+            --primary-color: #8a2be2;
+            --primary-hover: #9d4edd;
+            --text-color: #f8f9fa;
+            --muted-color: #a0aec0;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }}
+
+        * {{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }}
+
+        body {{
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }}
+
+        /* Ambient Glowing Background Elements */
+        body::before, body::after {{
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.4;
+        }}
+
+        body::before {{
+            background: var(--glow-color);
+            top: 15%;
+            left: 20%;
+            animation: float-slow 12s infinite alternate;
+        }}
+
+        body::after {{
+            background: #4facfe;
+            bottom: 15%;
+            right: 20%;
+            animation: float-slow-reverse 15s infinite alternate;
+        }}
+
+        @keyframes float-slow {{
+            0% {{ transform: translate(0, 0) scale(1); }}
+            100% {{ transform: translate(50px, 30px) scale(1.1); }}
+        }}
+
+        @keyframes float-slow-reverse {{
+            0% {{ transform: translate(0, 0) scale(1); }}
+            100% {{ transform: translate(-40px, -50px) scale(0.9); }}
+        }}
+
+        /* Glassmorphic Card */
+        .card {{
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+                        0 0 40px rgba(138, 43, 226, 0.1);
+            text-align: center;
+            animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 20px;
+        }}
+
+        @keyframes slide-up {{
+            0% {{ transform: translateY(30px); opacity: 0; }}
+            100% {{ transform: translateY(0); opacity: 1; }}
+        }}
+
+        .logo-container {{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }}
+
+        .logo {{
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--primary-color), #4facfe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(138, 43, 226, 0.4);
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+            animation: pulse-glow 2.5s infinite alternate;
+        }}
+
+        @keyframes pulse-glow {{
+            0% {{ box-shadow: 0 8px 24px rgba(138, 43, 226, 0.4); }}
+            100% {{ box-shadow: 0 8px 32px rgba(138, 43, 226, 0.7), 0 0 15px rgba(79, 172, 254, 0.4); }}
+        }}
+
+        h1 {{
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff, #dcdcdc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }}
+
+        .subtitle {{
+            color: var(--muted-color);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }}
+
+        .info-box {{
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            text-align: left;
+        }}
+
+        .info-row {{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }}
+
+        .info-row:last-child {{
+            margin-bottom: 0;
+        }}
+
+        .info-label {{
+            color: var(--muted-color);
+            font-weight: 500;
+        }}
+
+        .info-value {{
+            color: var(--text-color);
+            font-weight: 600;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }}
+
+        .info-value.scopes {{
+            background: rgba(138, 43, 226, 0.15);
+            color: #d8b4fe;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }}
+
+        .button-group {{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }}
+
+        .btn {{
+            width: 100%;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }}
+
+        .btn-primary {{
+            background: linear-gradient(135deg, var(--primary-color), #6366f1);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }}
+
+        .btn-primary:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+            background: linear-gradient(135deg, var(--primary-hover), #4f46e5);
+        }}
+
+        .btn-primary:active {{
+            transform: translateY(0);
+        }}
+
+        .btn-secondary {{
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }}
+
+        .btn-secondary:hover {{
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            border-color: rgba(255, 255, 255, 0.2);
+        }}
+
+        .footer {{
+            margin-top: 24px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.2);
+        }}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo-container">
+            <div class="logo">OS</div>
+        </div>
+        <h1>Authorize Access</h1>
+        <p class="subtitle">An external AI application is requesting secure connection to control your local browser automation instance.</p>
+        
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">Application</span>
+                <span class="info-value" title="Claude.ai">Claude Web Interface</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Redirect URI</span>
+                <span class="info-value" title="{redirect_uri}">{redirect_uri}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Permissions</span>
+                <span class="info-value scopes">mcp (Browser Automation)</span>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="authorize()">Authorize Connection</button>
+            <button class="btn btn-secondary" onclick="cancel()">Cancel</button>
+        </div>
+
+        <div class="footer">
+            Agent-OS v3.2.0 • Secure End-to-End Tunneling
+        </div>
+    </div>
+
+    <script>
+        function authorize() {{
+            window.location.href = "{redirect_url}";
+        }}
+
+        function cancel() {{
+            document.body.innerHTML = `
+                <div class="card" style="max-width: 400px;">
+                    <div class="logo-container">
+                        <div class="logo" style="background: linear-gradient(135deg, var(--error-color), #f43f5e);">✕</div>
+                    </div>
+                    <h1>Connection Denied</h1>
+                    <p class="subtitle" style="margin-bottom: 0;">Authorization was cancelled by the user. You can close this window now.</p>
+                </div>
+            `;
+        }}
+    </script>
+</body>
+</html>
+    """
+    return HTMLResponse(content=html_content)
 
 @app.post("/oauth/token")
 @app.post("/token")
