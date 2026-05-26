@@ -3625,6 +3625,7 @@ class AgentBrowser:
                     return self.data
 
             self._current_proxy = _ProxyRef(proxy_data)
+            new_proxy_url = proxy_data.get("url", proxy_id)
 
             # Direct proxy — recreate the context instead of full browser restart
             logger.info(f"Rotating proxy to {new_proxy_url}, recreating context")
